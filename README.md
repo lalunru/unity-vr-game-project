@@ -1,30 +1,79 @@
-# Project: Line O
+# Beyond the Door of Memory
 
-## 프로젝트 개요
-'Project: Line O'는 인터넷 커뮤니티의 '나폴리탄 괴담' 장르를 기반으로 제작된 Meta Quest 2용 1인칭 VR 공포 어드벤처 게임입니다. 플레이어는 지도에도 없는 미지의 지하철 노선 '라인 0'의 심야 관리자가 되어, 매일 새롭게 추가되는 기이한 업무 수칙을 완수하며 3일간 생존해야 합니다.
+> 한국어 설명은 [여기](#korean)를 참고하세요.
 
-## 기술 스택 및 환경
-* **Engine:** Unity 3D (URP)
-* **Platform:** Meta Quest 2
-* **Framework:** XR Interaction Toolkit
-* **Language:** C#
+A 2D emotional narrative adventure game built in Unity —  
+collect fragments of lost memory in a dreamlike subconscious world  
+and uncover the hidden truth, with **multiple endings shaped by your choices**.
 
-## 주요 시스템 및 플레이 방식
-플레이어는 아래와 같은 비일상적인 규칙들을 마주하며 심리적 압박감을 극복해야 합니다.
-1. **규칙 1 (시선 제한):** 오염된 광고판을 직접 응시할 경우 시각적 왜곡 발생
-2. **규칙 2 (타임어택):** 비정규 열차 진입 시 선로 점검일지를 제한 시간 내에 회수
-3. **규칙 3 (NPC 상호작용):** 정체불명의 역무원 조우 시, 상대의 행동 패턴(90도 인사, 손 뒤집기)에 맞춰 올바른 신체 동작으로 대처
-4. **규칙 4 (이벤트 대응):** 왜곡된 안내 방송 송출 시 제한 시간 내 시스템 재동기화 패널 작동
-5. **규칙 5 (퍼즐):** 규칙 세 개 랜덤 적용 + UV 손전등을 활용해 숨겨진 코드를 찾아 중앙 통제 시스템 재가동
+---
 
-## 주요 시스템 아키텍처
-게임의 확장성과 유지보수를 고려하여 객체 지향적인 구조로 핵심 시스템을 설계했습니다.
-* **GameManager.cs**: 게임의 전체 흐름(현재 일차, 규칙 상태)을 관리하고 레벨 클리어 및 재시작 등 핵심 상태를 제어하는 중앙 통제탑 역할을 수행합니다.
-* **RuleEventBase.cs**: 모든 개별 규칙(Rule 1~5)이 상속받는 설계도 클래스로, StartRule(), CompleteRule(), FailRule() 함수를 표준화하여 규칙 확장 시 코드의 재사용성을 높였습니다.
+## Gameplay & Level Design
 
-## 트러블슈팅 및 성능 최적화
-* **VR 환경 멀미 현상 개선:** 초기 빌드에서 목표 프레임(FPS) 미달로 인한 플레이어의 멀미 현상을 해결하기 위해 실시간 조명을 제거하고 100% Baked 라이트맵으로 전환했으며 텍스처 해상도를 하향하는 최적화를 진행했습니다.
-* **물리 상호작용 버그 해결:** VR 환경에서 아이템을 잡는 과정 중 발생하는 물리 충돌 버그와 불쾌한 조작감을 개선하기 위해 상호작용 방식을 '터치' 기반으로 변경하고 하이라이트 효과를 추가하여 직관성과 안정성을 높였습니다.
+Each stage represents a shard of memory, designed with a unique psychological gimmick
+to pressure the player emotionally and mechanically.
 
-### 플레이 영상
-[플레이 영상 확인하기](./assets/Test_Video.mp4)
+| Stage | Difficulty | Mechanic |
+|---|---|---|
+| Park of Memories | Easy | Tutorial — walking, interaction basics |
+| The Day of the Argument | Medium | Broken mirror fragments trigger **camera shake** on collision — visualizing psychological trauma |
+| The Accident Scene | Hard | Stealth — evade a pursuing **"Distorted Memory"** enemy. 3 hits = Game Over |
+| Silence | Hard | Periodic **full-map blackouts** + random repositioning of memory fragment items |
+
+---
+
+## Key Systems
+
+**Multiple Ending & Scene Control**
+Player choices are tracked as state values. Dialogue UI drives branching scene transitions dynamically — the same choice node can route to different story paths depending on accumulated state.
+
+**AI Pursuit System**
+The "Distorted Memory" enemy detects the player's position within a defined range and pursues using a custom tracking logic. The player must use the environment to break line-of-detection.
+
+**Dynamic Environment Algorithm**
+The blackout event (Stage 4) runs a timer-controlled coroutine that triggers darkness, then uses `Random.Range` to reassign item `Transform` positions — creating a live difficulty spike without level reloads.
+
+**Visual Feedback**
+Camera shake script activates on obstacle collision, amplifying physical impact and tension through screen-space displacement.
+
+---
+
+## Endings
+
+Player choices branch the story toward one of two endings.
+
+### Bad Ending
+https://github.com/lalunru/unity-2d-adventure-memory/blob/master/assets/%EA%B8%B0%EC%96%B5%EC%9D%98%EB%AC%B8%EB%84%88%EB%A8%B8_End_1.mp4
+
+### True Ending
+https://github.com/lalunru/unity-2d-adventure-memory/blob/master/assets/%EA%B8%B0%EC%96%B5%EC%9D%98%EB%AC%B8%EB%84%88%EB%A8%B8_End_2.mp4
+
+---
+
+## Tech Stack
+
+| | |
+|---|---|
+| Engine | Unity 2D |
+| Language | C# |
+| Platform | PC (Windows) |
+
+---
+
+## License
+
+This project was developed as a team academic project.  
+Assets and story content are not licensed for redistribution.
+
+---
+
+<a name="korean"></a>
+## 한국어 요약
+
+무의식 속 꿈의 공간을 배경으로 흩어진 기억의 조각을 수집하며 숨겨진 진실에 다가가는 2D 감정 서사형 어드벤처 게임입니다. 플레이어의 선택에 따라 결말이 달라지는 다중 엔딩 시스템을 채택했습니다.
+
+**핵심 구현**
+- 선택지 기반 씬 전환 및 스토리 분기 시스템
+- AI 추적 몬스터 (잠입 요소)
+- 암전 + 아이템 랜덤 재배치 동적 환경 알고리즘
+- 카메라 쉐이크 시각적 피드백
